@@ -8,4 +8,6 @@
     <dimen name="name_size">20sp</dimen>
     <dimen name="card_margin_horizontal">16dp</dimen>
     <dimen name="card_vertical_margin">8dp</dimen>
+    <dimen name="address_size">12sp</dimen>
+    <dimen name="top_text_item">4dp</dimen>
 </resources>

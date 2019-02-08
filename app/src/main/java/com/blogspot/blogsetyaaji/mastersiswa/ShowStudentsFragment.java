@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,7 @@ public class ShowStudentsFragment extends Fragment {
     private String url;
 
     TextView txtDnama, txtDalamat, txtDjson;
+    RecyclerView lvStudent;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -68,21 +70,22 @@ public class ShowStudentsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_show_students, container, false);
         RecyclerView lvStudent = view.findViewById(R.id.lv_student);*/
 
-//        return inflater.inflate(R.layout.fragment_show_students, container, false);
-        return inflater.inflate(R.layout.student_profile, container, false);
+        return inflater.inflate(R.layout.fragment_show_students, container, false);
+//        return inflater.inflate(R.layout.student_profile, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        RecyclerView lvStudent = view.findViewById(R.id.lv_student);
-        txtDnama = view.findViewById(R.id.txt_dnama);
-        txtDalamat = view.findViewById(R.id.txt_dalamat);
-        txtDjson = view.findViewById(R.id.txt_djson);
+        lvStudent = view.findViewById(R.id.lv_student);
+        lvStudent.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        txtDnama = view.findViewById(R.id.txt_dnama);
+//        txtDalamat = view.findViewById(R.id.txt_dalamat);
+//        txtDjson = view.findViewById(R.id.txt_djson);
 
         studentsData = new ArrayList<HashMap<String, String>>();
-        url = "http://192.168.70.10/SMPIDN/webdatabase/apitampilsiswa.php";
+        url = "http://192.168.70.202/SMPIDN/webdatabase/apitampilsiswa.php";
         showData();
     }
 
@@ -100,7 +103,7 @@ public class ShowStudentsFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 progressDialog.dismiss();
 //                Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_LONG).show();
-                txtDjson.setText(response.toString());
+                //txtDjson.setText(response.toString());
                 // pilah data per item
                 try {
                     // mengambil json array dengan nama 'students'
@@ -116,12 +119,16 @@ public class ShowStudentsFragment extends Fragment {
                         // memasukkan hashmap di arraylist
                         studentsData.add(rowData);
                     }
+                    StudentsAdapter studentsAdapter = new StudentsAdapter(getActivity(),
+                            studentsData);
                     // menampilkan datanya di komponen
-                    txtDnama.setText(studentsData.get(1).get("nama"));
-                    txtDalamat.setText(studentsData.get(1).get("alamat"));
+//                    txtDnama.setText(studentsData.get(1).get("nama"));
+//                    txtDalamat.setText(studentsData.get(1).get("alamat"));
+                    lvStudent.setAdapter(studentsAdapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                Toast.makeText(getActivity(), response.toString(), Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
